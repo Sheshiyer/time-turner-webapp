@@ -99,9 +99,6 @@ const CentralInfo: React.FC<CentralInfoProps> = ({
       <ProfilePage
         visible={showProfile}
         onClose={() => setShowProfile(false)}
-        birthDate={birthDate}
-        birthTime={birthTime}
-        birthPlace={birthPlace}
         timeAnalysis={{
           zodiacInfo,
           zodiacDesc,
