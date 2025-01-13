@@ -114,6 +114,54 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
   useEffect(() => {
     if (!svgRef.current) return;
 
+    // Setup hover animations for each ring
+    const rings = [
+      { selector: '.zodiac-ring circle', scale: 1.02 },
+      { selector: '.tcm-ring circle', scale: 1.02 },
+      { selector: '.daily-ring circle', scale: 1.02 },
+      { selector: '.ghati-ring circle:first-child', scale: 1.02 }
+    ];
+
+    const cleanupListeners: (() => void)[] = [];
+
+    rings.forEach(({ selector, scale }) => {
+      const ring = document.querySelector(selector);
+      if (!ring) return;
+
+      const handleMouseEnter = () => {
+        gsap.to(ring, {
+          scale,
+          filter: 'brightness(1.2)',
+          duration: 0.3,
+          transformOrigin: 'center center',
+          ease: 'power2.out'
+        });
+      };
+
+      const handleMouseLeave = () => {
+        gsap.to(ring, {
+          scale: 1,
+          filter: 'brightness(1)',
+          duration: 0.3,
+          transformOrigin: 'center center',
+          ease: 'power2.out'
+        });
+      };
+
+      ring.addEventListener('mouseenter', handleMouseEnter);
+      ring.addEventListener('mouseleave', handleMouseLeave);
+
+      cleanupListeners.push(() => {
+        ring.removeEventListener('mouseenter', handleMouseEnter);
+        ring.removeEventListener('mouseleave', handleMouseLeave);
+      });
+    });
+
+    // Cleanup function
+    return () => {
+      cleanupListeners.forEach(cleanup => cleanup());
+    };
+
     // Calculate fixed positions based on birth data
     const [birthHour, birthMinute] = birthTime.split(':').map(Number);
     const { index: zodiacIndex, sign: currentSign } = getZodiacInfo(birthDate);
@@ -140,10 +188,28 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
       yoyo: true,
       ease: 'sine.inOut'
     });
+
+    // Rotate ghati ring smoothly
+    gsap.to('.ghati-ring', {
+      rotation: 360,
+      duration: 60,
+      repeat: -1,
+      ease: 'none',
+      transformOrigin: 'center center'
+    });
+
+    // Smooth animation for ghati indicator
+    gsap.to('.ghati-ring circle:last-child', {
+      scale: 1.2,
+      duration: 1,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
   }, [birthDate, birthTime]);
 
   return (
-    <div className="relative w-full h-full min-h-[400px] grid grid-rows-[1fr,auto] gap-1 py-1 alethiometer-bg">
+    <div className="relative w-full h-full min-h-[400px] grid grid-rows-[1fr,auto] gap-1 py-1">
       {/* Central Info Modal */}
       <CentralInfo
         visible={showCentralInfo}
@@ -299,7 +365,7 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
             </g>
 
             {/* TCM Ring */}
-            <g style={{ opacity: visibleRings.tcm ? 1 : 0 }}>
+            <g className="tcm-ring" style={{ opacity: visibleRings.tcm ? 1 : 0 }}>
               <circle
                 cx="200"
                 cy="200"
@@ -315,6 +381,7 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
             {/* Daily ring with Biorhythm */}
             <g className="daily-ring" style={{ opacity: visibleRings.daily ? 1 : 0 }}>
               <circle
+                className="ring-hover"
                 cx="200"
                 cy="200"
                 r="79"
@@ -326,33 +393,60 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
               <BiorhythmRing radius={79} birthDate={birthDate} />
             </g>
 
-            {/* Ghati ring (innermost) */}
-            <g style={{ opacity: visibleRings.biorhythm ? 1 : 0 }}>
+              {/* Ghati ring (innermost) */}
+            <g style={{ opacity: visibleRings.biorhythm ? 1 : 0 }} className="ghati-ring">
+              {/* Background circle */}
               <circle
                 cx="200"
                 cy="200"
                 r="36"
+                className="ring-hover"
                 fill="url(#engravedPattern)"
                 stroke="url(#biorhythmGradient)"
                 strokeWidth="35"
                 opacity="0.7"
               />
-              {/* 60 ghatis in a day */}
+              
+              {/* Grid lines */}
+              {Array.from({ length: 12 }, (_, i) => {
+                const angle = (i * 360) / 12;
+                const radian = (angle * Math.PI) / 180;
+                const innerX = 200 + 20 * Math.cos(radian);
+                const innerY = 200 + 20 * Math.sin(radian);
+                const outerX = 200 + 36 * Math.cos(radian);
+                const outerY = 200 + 36 * Math.sin(radian);
+                return (
+                  <line
+                    key={`grid-${i}`}
+                    x1={innerX}
+                    y1={innerY}
+                    x2={outerX}
+                    y2={outerY}
+                    stroke="#F6F2C0"
+                    strokeWidth="0.5"
+                    opacity="0.2"
+                  />
+                );
+              })}
+              
+              {/* Ghati numbers */}
               {Array.from({ length: 60 }, (_, i) => {
                 const angle = (i * 360) / 60 - 90;
                 const radian = (angle * Math.PI) / 180;
-                const x = 200 + 36 * Math.cos(radian);
-                const y = 200 + 36 * Math.sin(radian);
+                const radius = i % 5 === 0 ? 34 : 36; // Major markers slightly inset
+                const x = 200 + radius * Math.cos(radian);
+                const y = 200 + radius * Math.sin(radian);
                 return (
                   <g key={i} transform={`translate(${x},${y}) rotate(${angle})`}>
                     <text
-                      className="ghati-marker cursor-pointer hover:opacity-80 transition-opacity"
+                      className="ghati-marker cursor-pointer hover:opacity-80 transition-all duration-300"
                       textAnchor="middle"
                       alignmentBaseline="middle"
                       fill="#F6F2C0"
-                      fontSize="8"
+                      fontSize={i % 5 === 0 ? "10" : "7"}
                       filter="url(#glow)"
                       style={{ transform: `rotate(${-angle}deg)` }}
+                      opacity={i % 5 === 0 ? "0.9" : "0.6"}
                     >
                       <title>Ghati {i + 1} ({(i * 24).toString().padStart(2, '0')}:00 minutes)</title>
                       {(i + 1).toString().padStart(2, '0')}
@@ -360,6 +454,16 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
                   </g>
                 );
               })}
+              
+              {/* Current ghati indicator */}
+              <circle
+                cx="200"
+                cy="164" // 200 - 36 (radius) to position at top
+                r="2"
+                fill="#F6F2C0"
+                className="animate-pulse"
+                filter="url(#glow)"
+              />
             </g>
 
             {/* Center piece */}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular border -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- Ornate circular frame -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="3,3"/>
+  
+  <!-- Capricorn symbol - stylized sea-goat -->
+  <!-- Goat head and horn -->
+  <path d="M30 45 C35 40, 45 35, 50 40" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+  <path d="M35 42 C30 35, 35 30, 40 35" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2"/>
+  
+  <!-- Body transitioning to fish tail -->
+  <path d="M50 40 C55 40, 60 45, 65 50" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2.5"/>
+  
+  <!-- Fish tail -->
+  <path d="M65 50 C70 55, 70 60, 65 65 C60 70, 55 65, 60 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+  
+  <!-- Front leg -->
+  <path d="M45 40 L40 50" 
+        stroke="#FFD700" 
+        stroke-width="2" 
+        stroke-linecap="round"/>
+  
+  <!-- Scales suggestion on tail -->
+  <g stroke="#FFD700" stroke-width="1" opacity="0.8">
+    <path d="M62 55 L64 53"/>
+    <path d="M60 60 L62 58"/>
+    <path d="M58 65 L60 63"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <g stroke="#FFD700" stroke-width="1">
+    <line x1="50" y1="10" x2="50" y2="20"/>
+    <line x1="50" y1="80" x2="50" y2="90"/>
+    <line x1="10" y1="50" x2="20" y2="50"/>
+    <line x1="80" y1="50" x2="90" y2="50"/>
+    <!-- Additional ornate details -->
+    <circle cx="50" cy="50" r="35" fill="none" stroke-dasharray="1,5"/>
+    <!-- Small dots representing stars -->
+    <circle cx="35" cy="35" r="1" fill="#FFD700"/>
+    <circle cx="65" cy="65" r="1" fill="#FFD700"/>
+  </g>
+  
+  <!-- Eye -->
+  <circle cx="33" cy="43" r="1" fill="#FFD700"/>
+</svg>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular border -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- Ornate circular frame -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="3,3"/>
+  
+  <!-- Cancer symbol - stylized crab with spiral claws -->
+  <!-- Main body -->
+  <circle cx="50" cy="50" r="10" 
+          fill="none" 
+          stroke="#FFD700" 
+          stroke-width="2"/>
+  
+  <!-- Spiral claws -->
+  <path d="M35 45 C30 45, 25 40, 30 35 C35 30, 40 35, 35 40" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2.5" 
+        stroke-linecap="round"/>
+  <path d="M65 45 C70 45, 75 40, 70 35 C65 30, 60 35, 65 40" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2.5" 
+        stroke-linecap="round"/>
+  
+  <!-- Lower legs -->
+  <path d="M40 60 C35 65, 30 65, 25 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2"/>
+  <path d="M60 60 C65 65, 70 65, 75 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2"/>
+  
+  <!-- Decorative elements -->
+  <g stroke="#FFD700" stroke-width="1">
+    <line x1="50" y1="10" x2="50" y2="20"/>
+    <line x1="50" y1="80" x2="50" y2="90"/>
+    <line x1="10" y1="50" x2="20" y2="50"/>
+    <line x1="80" y1="50" x2="90" y2="50"/>
+    <!-- Additional ornate details -->
+    <circle cx="50" cy="50" r="35" fill="none" stroke-dasharray="1,5"/>
+    <!-- Small dots representing stars -->
+    <circle cx="45" cy="45" r="1" fill="#FFD700"/>
+    <circle cx="55" cy="45" r="1" fill="#FFD700"/>
+  </g>
+</svg>

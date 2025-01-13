@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular border -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- Ornate circular frame -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="3,3"/>
+  
+  <!-- Aries symbol - stylized ram's horns -->
+  <path d="M35 65 C35 45, 45 35, 50 35 C55 35, 65 45, 65 65" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="3" 
+        stroke-linecap="round"/>
+  
+  <!-- Decorative curls -->
+  <path d="M35 65 C35 60, 38 58, 40 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2"/>
+  <path d="M65 65 C65 60, 62 58, 60 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2"/>
+  
+  <!-- Central dot -->
+  <circle cx="50" cy="50" r="2" fill="#FFD700"/>
+  
+  <!-- Decorative rays -->
+  <g stroke="#FFD700" stroke-width="1">
+    <line x1="50" y1="10" x2="50" y2="20"/>
+    <line x1="50" y1="80" x2="50" y2="90"/>
+    <line x1="10" y1="50" x2="20" y2="50"/>
+    <line x1="80" y1="50" x2="90" y2="50"/>
+  </g>
+</svg>

@@ -1,202 +1,122 @@
-# Quantum Watch Faces Chrome Extension - Development Roadmap
-`Version 1.0.0 | Chrome Extension Implementation`
+# Time Turner Development Tasks
 
-## Phase 1: Extension Foundation (Current)
-### Chrome Extension Setup
-- [x] Basic extension structure
-- [x] Manifest configuration
-- [x] Background script setup
-- [x] React integration
+## Core System Updates
 
-### Modern Clock Implementation
-- [ ] Digital time display component
-- [ ] Analog clock overlay
-- [ ] Font integration (JetBrains Mono)
-- [ ] Display customization options
+### View Toggle Implementation
+- [ ] Create ViewToggle component
+- [ ] Add view state management in App.tsx
+- [ ] Implement smooth transition animations between views
+- [ ] Preserve state and alignments during view switches
 
-### Extension Architecture
-- [ ] State management system
-- [ ] Data persistence
-- [ ] Settings storage
-- [ ] Performance optimization
+### 3D View Refinements
+- [ ] Simplify sphere materials and textures
+- [ ] Implement basic crystalline effect
+- [ ] Add Dust particle system
+  - [ ] Basic particle flow
+  - [ ] Alignment-reactive behavior
+  - [ ] Performance optimization
+- [ ] Improve sphere transparency and layering
+- [ ] Add subtle glow effects for active alignments
 
-## Phase 2: Core Time Scales
-### TCM Body Clock
-- [ ] Organ system data structure
-- [ ] 12-segment wheel component
-- [ ] Energy flow animations
-- [ ] Transition system
-- [ ] Notification implementation
+### 2D View Enhancements
+- [ ] Refine ring aesthetics to match alethiometer style
+- [ ] Improve symbol rendering and clarity
+- [ ] Add hover effects for symbols
+- [ ] Enhance rotation mechanics
+- [ ] Implement precise alignment detection
 
-### Biorhythm System
-- [ ] Calculation engine
-- [ ] Wave visualization component
-- [ ] Three-cycle integration
-- [ ] Progress indicators
-- [ ] Data persistence
+## Shared Components
 
-## Phase 3: Celestial Integration
-### Astrological System
-- [ ] Transit calculation engine
-- [ ] Western astrology component
-- [ ] Vedic dasha integration
-- [ ] Real-time updates
-- [ ] Position visualization
+### State Management
+- [ ] Create shared state interface for both views
+- [ ] Implement state synchronization
+- [ ] Add alignment detection system
+- [ ] Create meaning interpretation system
 
-### Human Design Integration
-- [ ] Gate tracking system
-- [ ] Hexagram visualization
-- [ ] Energy type indicators
-- [ ] Transition management
-- [ ] User profile integration
+### User Interface
+- [ ] Design view toggle button
+- [ ] Add view transition indicators
+- [ ] Implement shared controls panel
+- [ ] Create unified settings interface
 
-## Phase 4: Oracle Implementation
-### Basic Oracle System
-- [ ] Interaction design
-- [ ] Timing mechanism
-- [ ] Cooldown system
-- [ ] State persistence
+## Features
 
-### Tarot & I-Ching
-- [ ] Card/hexagram display
-- [ ] Minimalist interface
-- [ ] Interpretation system
-- [ ] History tracking
+### Alignment System
+- [ ] Define meaningful alignment patterns
+- [ ] Implement alignment detection logic
+- [ ] Add visual feedback for alignments
+- [ ] Create alignment history tracking
 
-## Phase 5: Modern UI Implementation
-### Core Visual Identity
-- [ ] Implement gradient theme system
-  - Deep space-inspired color palette
-  - Dynamic gradient transitions
-  - Glassmorphism effects
-- [ ] Design and animate custom logo
-- [ ] Create neon accent system
-- [ ] Implement dark mode as default
+### Dust Visualization
+- [ ] Implement particle system
+- [ ] Add flow patterns between spheres
+- [ ] Create alignment-reactive behavior
+- [ ] Optimize performance
 
-### Layout Architecture
-- [ ] Build collapsible sidebar navigation
-  - Smooth transition animations
-  - Hover state effects
-  - Quick access menu
-- [ ] Implement main display area
-  - Card-based layout system
-  - Floating elements
-  - Parallax effects
-- [ ] Create profile section
-  - Avatar system
-  - User preferences
-  - Sync functionality
+### Time Integration
+- [ ] Improve real-time updates
+- [ ] Add temporal pattern detection
+- [ ] Implement historical data tracking
+- [ ] Create future pattern predictions
 
-### Interactive Elements
-- [ ] Develop hover state system
-  - Scale transformations
-  - Gradient shifts
-  - Glow effects
-- [ ] Implement transition animations
-  - Cross-fades between scales
-  - Elastic animations
-  - Particle effects
-- [ ] Add loading states and indicators
+## Optimization
 
-### Time Scale Visualizations
-- [ ] Enhance Modern Clock
-  - Floating number effects
-  - Smooth transitions
-  - Ambient animations
-- [ ] Upgrade Organ Clock
-  - 3D wheel implementation
-  - Energy flow animations
-  - Transition effects
-- [ ] Improve Biorhythm Display
-  - Fluid wave animations
-  - Interactive graph points
-  - Real-time updates
-- [ ] Enhance Astrology View
-  - 3D planet rotations
-  - Constellation patterns
-  - Transit animations
-- [ ] Update Human Design Display
-  - Dynamic hexagrams
-  - Energy visualizations
-  - Pulse animations
-- [ ] Modernize Oracle Interface
-  - Card flip animations
-  - Particle effects
-  - Transition sequences
+### Performance
+- [ ] Optimize 3D rendering
+- [ ] Implement view-specific detail levels
+- [ ] Add particle system scaling
+- [ ] Optimize state management
 
-### Additional Features
-- [ ] Implement search functionality
-  - Quick access system
-  - History tracking
-  - Favorites management
-- [ ] Create notification system
-  - Toast messages
-  - Transition alerts
-  - Custom sounds
-- [ ] Build help center
-  - Interactive tutorials
-  - Contextual tooltips
-  - Documentation system
+### Accessibility
+- [ ] Add keyboard controls
+- [ ] Implement screen reader support
+- [ ] Create high-contrast mode
+- [ ] Add reduced motion options
 
-## Phase 6: Integration & Polish
-### System Unification
-- [ ] Layer management
-- [ ] State synchronization
-- [ ] Theme integration
-- [ ] Animation system
-- [ ] Performance optimization
+## Testing
 
-### Extension Features
-- [ ] Advanced settings panel
-  - Theme customization
-  - Animation controls
-  - Preference management
-- [ ] Quick controls
-- [ ] Keyboard shortcuts
-- [ ] Context menu integration
+### Unit Tests
+- [ ] Test view toggle functionality
+- [ ] Verify state preservation
+- [ ] Test alignment detection
+- [ ] Validate time calculations
 
-## Phase 7: Performance & Testing
-### Optimization
-- [ ] Memory management
-- [ ] Battery efficiency
-- [ ] Animation performance
-- [ ] State updates
+### Integration Tests
+- [ ] Test view transitions
+- [ ] Verify state synchronization
+- [ ] Test particle system
+- [ ] Validate user interactions
 
-### Testing Suite
-- [ ] Unit tests
-- [ ] Integration tests
-- [ ] Performance benchmarks
-- [ ] Cross-browser testing
+### Performance Tests
+- [ ] Measure rendering performance
+- [ ] Test particle system scaling
+- [ ] Verify state management efficiency
+- [ ] Monitor memory usage
 
-## Phase 8: Distribution
-### Documentation
-- [ ] API documentation
-- [ ] User guide
-- [ ] Developer guide
-- [ ] Contribution guidelines
+## Documentation
 
-### Chrome Web Store
-- [ ] Store listing
-- [ ] Screenshots/videos
-- [ ] Privacy policy
-- [ ] Support documentation
+### User Guide
+- [ ] Document view switching
+- [ ] Explain alignment system
+- [ ] Detail interaction methods
+- [ ] Create troubleshooting guide
 
-## Future Development
-### Planned Features
-1. Advanced pattern recognition
-2. AI-assisted interpretation
-3. Data export/import
-4. Custom visualization themes
+### Developer Documentation
+- [ ] Document architecture
+- [ ] Create component documentation
+- [ ] Add state management guide
+- [ ] Include performance guidelines
 
-### Integration Ideas
-1. Calendar integration
-2. Task management
-3. Weather correlation
-4. Health app connectivity
+## Future Considerations
 
-## Notes
-- Development timeline is flexible
-- Focus on core functionality first
-- Regular performance reviews
-- Community feedback integration
-- Security-first approach
+### Enhanced Features
+- [ ] Personal pattern recognition
+- [ ] Advanced alignment predictions
+- [ ] Historical pattern analysis
+- [ ] Custom symbol systems
+
+### Integrations
+- [ ] Calendar synchronization
+- [ ] Time tracking features
+- [ ] Data export capabilities
+- [ ] API integrations

@@ -1,126 +1,124 @@
-# Quantum Watch Faces Chrome Extension
-`Version 1.0.0 | Consciousness Runtime 2024`
+# Time Turner Chrome Extension
 
-A powerful Chrome extension that transforms your browser into a multi-dimensional time visualization tool, integrating modern timekeeping with ancient wisdom systems.
+A Chrome extension that reimagines time visualization through the lens of His Dark Materials' alethiometer, offering both 2D and 3D interfaces for exploring temporal patterns and personal rhythms.
 
 ## Features
 
-### 🕒 Modern Clock
-- Digital and analog time displays
-- Dynamic sizing and positioning
-- Minimal, elegant design using JetBrains Mono font
-- Customizable display options
+- **Dual View System**
+  - Traditional Alethiometer View (2D) for precise readings
+  - Crystalline Sphere View (3D) for immersive visualization
+  - Seamless switching between views while maintaining state
 
-### 🌱 TCM Body Clock
-- 12-segment organ system visualization
-- Real-time organ energy tracking
-- Transition countdowns and previews
-- Energy flow visualization
+- **Temporal Layers**
+  - Zodiac influences and astronomical alignments
+  - Traditional Chinese Medicine (TCM) elements and cycles
+  - Personal biorhythms and patterns
+  - Dust particle visualization of meaningful connections
 
-### 🌊 Biorhythm Tracking
-- Physical, emotional, and intellectual cycle tracking
-- Wave-based visualization
-- Current point indicators
-- Trend analysis
+- **Interactive Elements**
+  - Rotate rings/spheres to explore alignments
+  - Real-time updates based on current time
+  - Visual feedback for significant patterns
+  - Intuitive controls in both views
 
-### ⭐ Astrological Time
-- Western transit tracking
-- Vedic dasha system integration
-- Real-time planetary positions
-- Transit period monitoring
+## Installation
 
-### 🔮 Human Design Gates
-- Active gate visualization
-- Hexagram patterns
-- Energy type indicators
-- Transition previews
-
-### 🎴 I-Ching/Tarot Oracle
-- On-demand wisdom access
-- Minimalist card display
-- I-Ching hexagram visualization
-- Cooldown system
-
-## Technical Architecture
-
-### Layer System
-```javascript
-{
-  baseLayer: "modern_time",
-  overlays: [
-    "organ_system",
-    "biorhythm_indicators",
-    "transit_highlights",
-    "gate_activations",
-    "oracle_state"
-  ]
-}
-```
-
-### Performance Optimization
-- Batch calculations
-- 24-hour pre-computation
-- Efficient animation management
-- Smart refresh rules
-
-## Development
-
-### Prerequisites
-- Node.js (latest LTS version)
-- npm or yarn
-- Chrome browser
-
-### Installation
-1. Clone the repository:
+1. Clone this repository
 ```bash
-git clone [repository-url]
+git clone https://github.com/yourusername/time-turner-chrome-ext.git
 ```
 
-2. Install dependencies:
+2. Install dependencies
 ```bash
 npm install
 ```
 
-3. Build the extension:
+3. Build the extension
 ```bash
 npm run build
 ```
 
-4. Load in Chrome:
-- Open Chrome
-- Go to `chrome://extensions/`
+4. Load in Chrome
+- Open Chrome and navigate to `chrome://extensions/`
 - Enable "Developer mode"
-- Click "Load unpacked"
-- Select the `dist` directory
+- Click "Load unpacked" and select the `dist` folder
 
-### Development Commands
+## Usage
+
+### Alethiometer View (2D)
+
+The traditional view presents concentric rings that can be rotated to explore different temporal alignments:
+
+- **Outer Ring**: Zodiac signs and astronomical positions
+- **Middle Ring**: TCM elements and their influences
+- **Inner Ring**: Personal biorhythms and cycles
+- **Center**: Current time and significant alignments
+
+### Crystalline View (3D)
+
+The immersive view represents temporal layers as crystalline spheres:
+
+- **Outer Sphere**: Cosmic influences and zodiac patterns
+- **Middle Sphere**: Elemental energies and cycles
+- **Inner Sphere**: Personal temporal patterns
+- **Dust Particles**: Flow between spheres indicating connections
+
+### View Switching
+
+- Use the view toggle button in the top-right corner
+- Current alignments and readings are preserved when switching views
+- Each view offers unique insights into the same temporal patterns
+
+## Development
+
+### Project Structure
+
+```
+src/
+├── components/
+│   ├── AlethiometerClock.tsx    # 2D view implementation
+│   ├── Scene3D.tsx              # 3D view implementation
+│   ├── rings/                   # Ring components
+│   └── ...
+├── utils/
+│   ├── zodiac.ts               # Astronomical calculations
+│   └── ...
+└── types/
+    └── rings.ts                # Type definitions
+```
+
+### Running Locally
+
 ```bash
-# Start development server
 npm run dev
+```
 
-# Build for production
+### Building
+
+```bash
 npm run build
+```
 
-# Run tests
+### Testing
+
+```bash
 npm test
 ```
 
-## Project Structure
-```
-src/
-├── components/         # React components for each time scale
-├── context/           # React context for state management
-├── background.ts      # Extension background script
-├── main.tsx          # Main entry point
-└── App.tsx           # Root component
+## Contributing
 
-public/               # Static assets
-icons/                # Extension icons
-styles/               # Global styles
-```
-
-## Current Status
-The project is in active development, focusing on the core time visualization systems and Chrome extension integration. See [TODO.md](TODO.md) for the detailed development roadmap.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
-MIT License - See LICENSE file for details
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Inspired by Philip Pullman's His Dark Materials series
+- Built with React, Three.js, and TypeScript
+- Uses astronomical calculations from the Astronomia library

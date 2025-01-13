@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular border -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- Ornate circular frame -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="3,3"/>
+  
+  <!-- Sagittarius symbol - stylized bow and arrow -->
+  <!-- Bow -->
+  <path d="M30 60 C30 45, 45 35, 60 35 C75 35, 75 50, 70 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+  
+  <!-- Bowstring -->
+  <path d="M30 60 L70 60" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="1.5"
+        stroke-dasharray="2,2"/>
+  
+  <!-- Arrow -->
+  <path d="M40 50 L65 50" 
+        stroke="#FFD700" 
+        stroke-width="2" 
+        stroke-linecap="round"/>
+  
+  <!-- Arrow head -->
+  <path d="M65 50 L60 45 M65 50 L60 55" 
+        stroke="#FFD700" 
+        stroke-width="2" 
+        stroke-linecap="round"/>
+  
+  <!-- Star mark -->
+  <g transform="translate(45,40) rotate(45)">
+    <path d="M0 -5 L0 5 M-5 0 L5 0" 
+          stroke="#FFD700" 
+          stroke-width="1.5"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <g stroke="#FFD700" stroke-width="1">
+    <line x1="50" y1="10" x2="50" y2="20"/>
+    <line x1="50" y1="80" x2="50" y2="90"/>
+    <line x1="10" y1="50" x2="20" y2="50"/>
+    <line x1="80" y1="50" x2="90" y2="50"/>
+    <!-- Additional ornate details -->
+    <circle cx="50" cy="50" r="35" fill="none" stroke-dasharray="1,5"/>
+    <!-- Small dots representing stars -->
+    <circle cx="65" cy="50" r="1" fill="#FFD700"/>
+    <circle cx="35" cy="45" r="1" fill="#FFD700"/>
+    <circle cx="35" cy="55" r="1" fill="#FFD700"/>
+  </g>
+  
+  <!-- Centaur suggestion (subtle) -->
+  <path d="M35 65 C40 70, 45 70, 50 65" 
+        fill="none" 
+        stroke="#FFD700" 
+        stroke-width="1"
+        opacity="0.7"/>
+</svg>
