@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle -->
+  <circle cx="64" cy="64" r="60" stroke="#4B5563" stroke-width="8" fill="#1F2937"/>
+  <!-- Hour hand -->
+  <line x1="64" y1="64" x2="64" y2="40" stroke="#60A5FA" stroke-width="6" stroke-linecap="round"/>
+  <!-- Minute hand -->
+  <line x1="64" y1="64" x2="88" y2="64" stroke="#93C5FD" stroke-width="4" stroke-linecap="round"/>
+  <!-- Center dot -->
+  <circle cx="64" cy="64" r="4" fill="#60A5FA"/>
+</svg>
