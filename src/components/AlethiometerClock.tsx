@@ -157,11 +157,6 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
       });
     });
 
-    // Cleanup function
-    return () => {
-      cleanupListeners.forEach(cleanup => cleanup());
-    };
-
     // Calculate fixed positions based on birth data
     const [birthHour, birthMinute] = birthTime.split(':').map(Number);
     const { index: zodiacIndex, sign: currentSign } = getZodiacInfo(birthDate);
@@ -206,6 +201,17 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
       yoyo: true,
       ease: 'sine.inOut'
     });
+
+    // Cleanup function
+    return () => {
+      cleanupListeners.forEach(cleanup => cleanup());
+      // Kill all GSAP animations
+      gsap.killTweensOf('.zodiac-ring');
+      gsap.killTweensOf('.daily-ring');
+      gsap.killTweensOf('.ghati-ring');
+      gsap.killTweensOf('.zodiac-symbol, .hour-marker');
+      gsap.killTweensOf('.ghati-ring circle:last-child');
+    };
   }, [birthDate, birthTime]);
 
   return (

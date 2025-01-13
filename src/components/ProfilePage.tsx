@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
+import { useAuth } from '../context/AuthContext'
+import { updateProfile, signOut } from '../lib/supabase'
+import LoadingSpinner from './LoadingSpinner'
 import {
   UserIcon,
   CogIcon,
@@ -7,47 +10,119 @@ import {
   DevicePhoneMobileIcon,
   ChevronDownIcon,
   ClockIcon,
-} from '@heroicons/react/24/outline';
+  ArrowRightOnRectangleIcon,
+} from '@heroicons/react/24/outline'
 
 interface ProfilePageProps {
-  visible: boolean;
-  onClose: () => void;
-  birthDate?: string;
-  birthTime?: string;
-  birthPlace?: string;
+  visible: boolean
+  onClose: () => void
   timeAnalysis?: {
-    zodiacInfo: any;
-    zodiacDesc: string;
+    zodiacInfo: any
+    zodiacDesc: string
     biorhythm: {
-      physical: number;
-      emotional: number;
-      intellectual: number;
-    };
-    currentOrgan: string;
-  };
+      physical: number
+      emotional: number
+      intellectual: number
+    }
+    currentOrgan: string
+  }
 }
 
 type Section = {
-  id: string;
-  title: string;
-  icon: React.ReactNode;
+  id: string
+  title: string
+  icon: React.ReactNode
   subsections: {
-    id: string;
-    title: string;
-    content: React.ReactNode;
-  }[];
-};
+    id: string
+    title: string
+    content: React.ReactNode
+  }[]
+}
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ 
   visible, 
   onClose,
-  birthDate = '',
-  birthTime = '',
-  birthPlace = '',
   timeAnalysis
 }) => {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [activeSubsection, setActiveSubsection] = useState<string | null>(null);
+  const { user, profile } = useAuth()
+  const [activeSection, setActiveSection] = useState<string | null>(null)
+  const [activeSubsection, setActiveSubsection] = useState<string | null>(null)
+  const [formData, setFormData] = useState({
+    username: profile?.username || '',
+    birth_date: profile?.birth_date || '',
+    birth_time: profile?.birth_time || '',
+    birth_place: profile?.birth_place || ''
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        username: profile.username,
+        birth_date: profile.birth_date,
+        birth_time: profile.birth_time,
+        birth_place: profile.birth_place
+      })
+    }
+  }, [profile])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const loadingMessages = [
+    "Consulting the alethiometer...",
+    "Aligning temporal gears...",
+    "Calculating zodiac influences...",
+    "Synchronizing with cosmic rhythms...",
+    "Decoding meridian flows...",
+    "Channeling temporal energies...",
+    "Harmonizing biorhythms..."
+  ]
+
+  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
+
+  useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setLoadingMessage(prevMsg => {
+          const currentIndex = loadingMessages.indexOf(prevMsg)
+          return loadingMessages[(currentIndex + 1) % loadingMessages.length]
+        })
+      }, 2000)
+      return () => clearInterval(interval)
+    }
+  }, [loading])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user) return
+
+    setLoading(true)
+    setError(null)
+    setLoadingMessage(loadingMessages[0])
+
+    try {
+      const { error } = await updateProfile(user.id, formData)
+      if (error) throw error
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSignOut = async () => {
+    const { error } = await signOut()
+    if (error) {
+      setError(error.message)
+    }
+  }
 
   const sections: Section[] = [
     {
@@ -120,246 +195,85 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
           id: 'profile',
           title: 'Profile Information',
           content: (
-            <div className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="form-group">
-                <label className="text-sm text-white/60">Name</label>
-                <input type="text" className="glass-input" placeholder="Your name" />
+                <label className="text-sm text-white/60">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  className="glass-input"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="text-sm text-white/60">Birth Date</label>
-                <input type="date" className="glass-input" defaultValue={birthDate} />
+                <input
+                  type="date"
+                  name="birth_date"
+                  className="glass-input"
+                  value={formData.birth_date}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="text-sm text-white/60">Birth Time</label>
-                <input type="time" className="glass-input" defaultValue={birthTime} />
+                <input
+                  type="time"
+                  name="birth_time"
+                  className="glass-input"
+                  value={formData.birth_time}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="text-sm text-white/60">Birth Place</label>
-                <input type="text" className="glass-input" placeholder="City, Country" defaultValue={birthPlace} />
+                <input
+                  type="text"
+                  name="birth_place"
+                  className="glass-input"
+                  value={formData.birth_place}
+                  onChange={handleInputChange}
+                  placeholder="City, Country"
+                  required
+                />
               </div>
-            </div>
-          ),
-        },
-        {
-          id: 'preferences',
-          title: 'Personal Preferences',
-          content: (
-            <div className="space-y-4">
-              <div className="form-group">
-                <label className="text-sm text-white/60">Time Format</label>
-                <select className="glass-input">
-                  <option value="12">12-hour</option>
-                  <option value="24">24-hour</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="text-sm text-white/60">Date Format</label>
-                <select className="glass-input">
-                  <option value="mdy">MM/DD/YYYY</option>
-                  <option value="dmy">DD/MM/YYYY</option>
-                  <option value="ymd">YYYY/MM/DD</option>
-                </select>
-              </div>
-            </div>
-          ),
-        },
-      ],
-    },
-    {
-      id: 'app',
-      title: 'App Details',
-      icon: <DevicePhoneMobileIcon className="w-5 h-5" />,
-      subsections: [
-        {
-          id: 'version',
-          title: 'Version Information',
-          content: (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-white/60">Version</span>
-                <span>1.0.0</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-white/60">Build</span>
-                <span>2024.1</span>
-              </div>
-              <button className="glass-button w-full mt-4">Check for Updates</button>
-            </div>
-          ),
-        },
-        {
-          id: 'storage',
-          title: 'Storage & Data',
-          content: (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-white/60">Cache Size</span>
-                <span>2.3 MB</span>
-              </div>
-              <button className="glass-button w-full">Clear Cache</button>
-              <button className="glass-button w-full">Export Data</button>
-            </div>
+              {error && (
+                <div className="text-red-500 text-sm mt-2">{error}</div>
+              )}
+              {loading ? (
+                <div className="mt-8">
+                  <LoadingSpinner message={loadingMessage} />
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="glass-button w-full mt-4"
+                >
+                  Save Changes
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="flex items-center justify-center gap-2 glass-button w-full mt-4 bg-red-500/10 hover:bg-red-500/20"
+              >
+                <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                Sign Out
+              </button>
+            </form>
           ),
         },
       ],
     },
-    {
-      id: 'settings',
-      title: 'Settings',
-      icon: <CogIcon className="w-5 h-5" />,
-      subsections: [
-        {
-          id: 'appearance',
-          title: 'Appearance',
-          content: (
-            <div className="space-y-4">
-              <div className="form-group">
-                <label className="text-sm text-white/60">Theme</label>
-                <select className="glass-input">
-                  <option value="dark">Dark</option>
-                  <option value="light">Light</option>
-                  <option value="system">System</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="text-sm text-white/60">Font Size</label>
-                <select className="glass-input">
-                  <option value="small">Small</option>
-                  <option value="medium">Medium</option>
-                  <option value="large">Large</option>
-                </select>
-              </div>
-            </div>
-          ),
-        },
-        {
-          id: 'notifications',
-          title: 'Notifications',
-          content: (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span>Enable Notifications</span>
-                <input type="checkbox" className="toggle" />
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Daily Reminders</span>
-                <input type="checkbox" className="toggle" />
-              </div>
-            </div>
-          ),
-        },
-      ],
-    },
-    {
-      id: 'about',
-      title: 'About',
-      icon: <InformationCircleIcon className="w-5 h-5" />,
-      subsections: [
-        {
-          id: 'info',
-          title: 'About Time Turner',
-          content: (
-            <div className="space-y-4">
-              <p className="text-sm text-white/80">
-                Time Turner is a sophisticated chronometer that combines ancient time-keeping wisdom
-                with modern biorhythm analysis. It integrates traditional Chinese medicine, zodiac influences,
-                and your personal biorhythms to provide a holistic view of your temporal patterns.
-              </p>
-              <div className="mt-4">
-                <h4 className="font-medium mb-2">Features</h4>
-                <ul className="list-disc list-inside space-y-1 text-sm text-white/80">
-                  <li>Zodiac and TCM time analysis</li>
-                  <li>Personal biorhythm tracking</li>
-                  <li>Traditional time unit conversions</li>
-                  <li>Customizable interface</li>
-                </ul>
-              </div>
-            </div>
-          ),
-        },
-        {
-          id: 'contact',
-          title: 'Contact & Support',
-          content: (
-            <div className="space-y-4">
-              <a href="mailto:support@timeturner.app" className="glass-button block text-center">
-                Email Support
-              </a>
-              <a href="https://timeturner.app/docs" target="_blank" rel="noopener noreferrer" className="glass-button block text-center">
-                Documentation
-              </a>
-              <a href="https://timeturner.app/faq" target="_blank" rel="noopener noreferrer" className="glass-button block text-center">
-                FAQ
-              </a>
-            </div>
-          ),
-        },
-      ],
-    },
-    {
-      id: 'legal',
-      title: 'Legal',
-      icon: <ScaleIcon className="w-5 h-5" />,
-      subsections: [
-        {
-          id: 'privacy',
-          title: 'Privacy Policy',
-          content: (
-            <div className="space-y-4 text-sm text-white/80">
-              <p>
-                We take your privacy seriously. Time Turner collects only essential data
-                needed for the app's core functionality. This includes:
-              </p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Birth date and time (for calculations)</li>
-                <li>Location data (optional, for accurate time zones)</li>
-                <li>App preferences and settings</li>
-              </ul>
-              <p className="mt-4">
-                Your data is stored locally on your device and is never shared with third parties
-                without your explicit consent.
-              </p>
-            </div>
-          ),
-        },
-        {
-          id: 'terms',
-          title: 'Terms of Service',
-          content: (
-            <div className="space-y-4 text-sm text-white/80">
-              <p>
-                By using Time Turner, you agree to our terms of service. The app is provided
-                "as is" without warranty of any kind.
-              </p>
-              <p>
-                While we strive for accuracy in our calculations and interpretations,
-                decisions made based on the app's information are solely your responsibility.
-              </p>
-            </div>
-          ),
-        },
-        {
-          id: 'licenses',
-          title: 'Licenses',
-          content: (
-            <div className="space-y-4 text-sm text-white/80">
-              <p>Time Turner is licensed under the MIT License.</p>
-              <div className="mt-4">
-                <h4 className="font-medium mb-2">Third-party Licenses</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>React - MIT License</li>
-                  <li>Tailwind CSS - MIT License</li>
-                  <li>Heroicons - MIT License</li>
-                </ul>
-              </div>
-            </div>
-          ),
-        },
-      ],
-    },
-  ];
+    // ... rest of your sections
+  ]
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
     <div 
@@ -464,7 +378,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage

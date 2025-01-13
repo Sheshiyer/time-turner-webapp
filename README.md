@@ -1,124 +1,88 @@
 # Time Turner Chrome Extension
 
-A Chrome extension that reimagines time visualization through the lens of His Dark Materials' alethiometer, offering both 2D and 3D interfaces for exploring temporal patterns and personal rhythms.
+A Chrome extension that combines traditional time-keeping wisdom with modern biorhythm analysis.
 
 ## Features
 
-- **Dual View System**
-  - Traditional Alethiometer View (2D) for precise readings
-  - Crystalline Sphere View (3D) for immersive visualization
-  - Seamless switching between views while maintaining state
+- Zodiac and TCM time analysis
+- Personal biorhythm tracking
+- Traditional time unit conversions
+- Customizable interface
+- User authentication and profile management
 
-- **Temporal Layers**
-  - Zodiac influences and astronomical alignments
-  - Traditional Chinese Medicine (TCM) elements and cycles
-  - Personal biorhythms and patterns
-  - Dust particle visualization of meaningful connections
+## Setup
 
-- **Interactive Elements**
-  - Rotate rings/spheres to explore alignments
-  - Real-time updates based on current time
-  - Visual feedback for significant patterns
-  - Intuitive controls in both views
-
-## Installation
-
-1. Clone this repository
-```bash
-git clone https://github.com/yourusername/time-turner-chrome-ext.git
-```
-
-2. Install dependencies
+1. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Build the extension
-```bash
-npm run build
+2. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```
+VITE_SUPABASE_URL=your_project_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
 ```
 
-4. Load in Chrome
-- Open Chrome and navigate to `chrome://extensions/`
-- Enable "Developer mode"
-- Click "Load unpacked" and select the `dist` folder
-
-## Usage
-
-### Alethiometer View (2D)
-
-The traditional view presents concentric rings that can be rotated to explore different temporal alignments:
-
-- **Outer Ring**: Zodiac signs and astronomical positions
-- **Middle Ring**: TCM elements and their influences
-- **Inner Ring**: Personal biorhythms and cycles
-- **Center**: Current time and significant alignments
-
-### Crystalline View (3D)
-
-The immersive view represents temporal layers as crystalline spheres:
-
-- **Outer Sphere**: Cosmic influences and zodiac patterns
-- **Middle Sphere**: Elemental energies and cycles
-- **Inner Sphere**: Personal temporal patterns
-- **Dust Particles**: Flow between spheres indicating connections
-
-### View Switching
-
-- Use the view toggle button in the top-right corner
-- Current alignments and readings are preserved when switching views
-- Each view offers unique insights into the same temporal patterns
-
-## Development
-
-### Project Structure
-
-```
-src/
-├── components/
-│   ├── AlethiometerClock.tsx    # 2D view implementation
-│   ├── Scene3D.tsx              # 3D view implementation
-│   ├── rings/                   # Ring components
-│   └── ...
-├── utils/
-│   ├── zodiac.ts               # Astronomical calculations
-│   └── ...
-└── types/
-    └── rings.ts                # Type definitions
-```
-
-### Running Locally
-
+3. Development:
 ```bash
 npm run dev
 ```
 
-### Building
-
+4. Build:
 ```bash
 npm run build
 ```
 
-### Testing
+## Authentication
 
+This project uses Supabase for authentication and user management. The following features are implemented:
+
+- Email/password authentication
+- User profiles with birth date, time, and location
+- Secure data storage with Row Level Security
+- Profile management and updates
+
+## Database Schema
+
+### Profiles Table
+```sql
+profiles (
+  id uuid references auth.users primary key,
+  username text unique,
+  avatar_url text,
+  birth_date text,
+  birth_time text,
+  birth_place text,
+  updated_at timestamp with time zone
+)
+```
+
+## Development
+
+1. Install the Supabase CLI:
 ```bash
-npm test
+brew install supabase/tap/supabase
+```
+
+2. Link to your Supabase project:
+```bash
+supabase link --project-ref your_project_ref
+```
+
+3. Push database migrations:
+```bash
+supabase db push
 ```
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Inspired by Philip Pullman's His Dark Materials series
-- Built with React, Three.js, and TypeScript
-- Uses astronomical calculations from the Astronomia library
+This project is licensed under the MIT License - see the LICENSE file for details.
