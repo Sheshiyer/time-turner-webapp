@@ -102,7 +102,7 @@ const AuthenticatedContent: React.FC = () => {
 
   // Show welcome screen if user has no profile data
   if (!profile?.birth_date || !profile?.birth_time || !profile?.birth_place) {
-    return <WelcomeIntro onComplete={() => {}} />
+    return <WelcomeIntro onComplete={() => window.location.reload()} />
   }
 
   return <MainContent />

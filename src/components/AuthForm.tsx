@@ -10,6 +10,10 @@ export const AuthForm = () => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [validationErrors, setValidationErrors] = useState<{
+    email?: string;
+    password?: string;
+  }>({})
 
   const loadingMessages = {
     signin: [
@@ -41,22 +45,71 @@ export const AuthForm = () => {
     }
   }, [loading, mode])
 
+  const validateForm = () => {
+    const errors: {email?: string; password?: string} = {}
+    
+    // Email validation
+    if (!email) {
+      errors.email = 'Email is required'
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+      errors.email = 'Invalid email address'
+    }
+
+    // Password validation
+    if (!password) {
+      errors.password = 'Password is required'
+    } else if (mode === 'signup' && password.length < 6) {
+      errors.password = 'Password must be at least 6 characters'
+    }
+
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setValidationErrors({})
+
+    if (!validateForm()) {
+      return
+    }
+
     setLoading(true)
     setLoadingMessage(loadingMessages[mode][0])
 
     try {
       if (mode === 'signin') {
         const { error } = await signInWithEmail(email, password)
-        if (error) throw error
+        if (error) {
+          if (error.message.includes('Invalid login credentials')) {
+            setError('Invalid email or password')
+          } else {
+            throw error
+          }
+        }
       } else {
-        const { error } = await signUpWithEmail(email, password)
-        if (error) throw error
+        // Validate username length before signup
+        const username = email.split('@')[0]
+        if (username.length < 3) {
+          setError('Email prefix must be at least 3 characters long')
+          return
+        }
+
+        const { data, error } = await signUpWithEmail(email, password)
+        if (error) {
+          if (error.message.includes('already registered')) {
+            setError('This email is already registered')
+          } else if (error.message.includes('weak password')) {
+            setError('Password is too weak. Please include numbers and special characters')
+          } else {
+            throw error
+          }
+        }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      console.error('Auth error:', err)
+      setError(err instanceof Error ? err.message : 'An error occurred during authentication')
     } finally {
       setLoading(false)
     }
@@ -112,28 +165,42 @@ export const AuthForm = () => {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 rounded-lg border border-[#F6F2C0]/30 
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setValidationErrors(prev => ({...prev, email: undefined}))
+                  }}
+                  className={`w-full px-4 py-3 bg-white/10 rounded-lg border 
+                           ${validationErrors.email ? 'border-red-400' : 'border-[#F6F2C0]/30'}
                            text-white placeholder-white/50 focus:outline-none focus:border-[#F6F2C0]
-                           backdrop-blur-sm transition-all"
+                           backdrop-blur-sm transition-all`}
                   required
                   placeholder="Email address"
                   autoComplete="email"
                 />
+                {validationErrors.email && (
+                  <p className="mt-1 text-red-400 text-sm">{validationErrors.email}</p>
+                )}
               </div>
 
               <div>
                 <input
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 rounded-lg border border-[#F6F2C0]/30 
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setValidationErrors(prev => ({...prev, password: undefined}))
+                  }}
+                  className={`w-full px-4 py-3 bg-white/10 rounded-lg border 
+                           ${validationErrors.password ? 'border-red-400' : 'border-[#F6F2C0]/30'}
                            text-white placeholder-white/50 focus:outline-none focus:border-[#F6F2C0]
-                           backdrop-blur-sm transition-all"
+                           backdrop-blur-sm transition-all`}
                   required
-                  placeholder="Password"
+                  placeholder={mode === 'signup' ? 'Password (min 6 characters)' : 'Password'}
                   autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
                 />
+                {validationErrors.password && (
+                  <p className="mt-1 text-red-400 text-sm">{validationErrors.password}</p>
+                )}
               </div>
 
               {error && (

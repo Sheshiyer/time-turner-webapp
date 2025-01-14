@@ -1,22 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
-interface Location {
-  address: string
-  lat: number
-  lng: number
-}
-
-interface UserData {
-  name: string
-  birthDate: string
-  birthTime: string
-  location: Location
-}
+import { Profile, supabase } from '../lib/supabase'
 
 interface UserContextType {
-  userData: UserData | null
-  updateUser: (data: UserData) => void
+  profile: Profile | null
+  updateProfile: (data: Partial<Profile>) => void
   isProfileComplete: boolean
+  error: string | null
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
@@ -30,41 +19,70 @@ export const useUser = () => {
 }
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [userData, setUserData] = useState<UserData | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Load user data from storage on mount
-    const loadUserData = () => {
+    // Load profile data from storage on mount
+    const loadProfile = () => {
       try {
-        const storedData = localStorage.getItem('userData')
-        if (storedData) {
-          setUserData(JSON.parse(storedData))
+        const storedProfile = localStorage.getItem('userProfile')
+        if (storedProfile) {
+          setProfile(JSON.parse(storedProfile))
         }
       } catch (error) {
-        console.error('Error loading user data:', error)
+        console.error('Error loading profile:', error)
+        setError('Failed to load profile data')
       }
     }
-    loadUserData()
+    loadProfile()
   }, [])
 
-  // Save user data whenever it changes
-  useEffect(() => {
-    if (userData) {
-      localStorage.setItem('userData', JSON.stringify(userData))
-    }
-  }, [userData])
+  const updateProfile = async (data: Partial<Profile>) => {
+    try {
+      if (!profile?.id) {
+        throw new Error('No profile ID found')
+      }
 
-  const updateUser = (data: UserData) => {
-    setUserData(data)
-    localStorage.setItem('userData', JSON.stringify(data))
+      // Update local state first for immediate UI feedback
+      const updatedProfile = { ...profile, ...data }
+      setProfile(updatedProfile)
+      localStorage.setItem('userProfile', JSON.stringify(updatedProfile))
+
+      // Then update Supabase
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update(data)
+        .eq('id', profile.id)
+
+      if (updateError) {
+        throw updateError
+      }
+
+      setError(null)
+    } catch (err) {
+      console.error('Profile update error:', err)
+      setError(err instanceof Error ? err.message : 'Failed to update profile')
+      // Revert local state on error
+      const storedProfile = localStorage.getItem('userProfile')
+      if (storedProfile) {
+        setProfile(JSON.parse(storedProfile))
+      }
+    }
   }
 
   return (
     <UserContext.Provider 
       value={{ 
-        userData, 
-        updateUser,
-        isProfileComplete: !!userData?.name && !!userData?.birthDate && !!userData?.birthTime && !!userData?.location
+        profile,
+        updateProfile,
+        error,
+        isProfileComplete: !!(
+          profile?.username &&
+          profile?.birth_date &&
+          profile?.birth_time &&
+          profile?.birth_place
+        )
       }}
     >
       {children}

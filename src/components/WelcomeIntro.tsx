@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/datepicker.css";
 import { supabase } from '../lib/supabase';
 import LoadingSpinner from './LoadingSpinner';
+import { useAuth } from '../context/AuthContext';
 
 interface FormData {
   firstName: string;
@@ -14,7 +15,12 @@ interface FormData {
   birthPlace: string;
 }
 
-const WelcomeIntro: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+interface WelcomeIntroProps {
+  onComplete: () => void;
+}
+
+export default function WelcomeIntro({ onComplete }: WelcomeIntroProps) {
+  const { refreshProfile } = useAuth();
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -65,27 +71,44 @@ const WelcomeIntro: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
         throw new Error('Please fill in all required fields');
       }
 
+      // Validate inputs
+      if (!formData.firstName.trim() || !formData.lastName.trim()) {
+        throw new Error('Please enter your full name');
+      }
+
+      // Format username to meet DB constraints
+      const username = `${formData.firstName}_${formData.lastName}`.toLowerCase()
+        .replace(/[^a-z0-9_]/g, '_')
+        .replace(/_+/g, '_')
+        .slice(0, 50); // Reasonable max length
+
+      // Format birth time to 24-hour format HH:mm:ss
+      const birthTime = formData.birthTime?.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
       const profileData = {
         id: user.id,
-        birth_date: formData.birthDate.toISOString().split('T')[0],
-        birth_time: formData.birthTime.toLocaleTimeString('en-US', { hour12: false }),
-        birth_place: formData.birthPlace,
-        username: `${formData.firstName} ${formData.lastName}`.trim(),
+        birth_date: formData.birthDate?.toISOString().split('T')[0],
+        birth_time: birthTime,
+        birth_place: formData.birthPlace.trim(),
+        username: username,
         updated_at: new Date().toISOString()
       };
 
-      // First check if profile exists
-      const { data: existingProfile, error: fetchError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', user.id)
-        .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 is "not found"
-        throw fetchError;
+      // Validate all required fields are present
+      const requiredFields = ['birth_date', 'birth_time', 'birth_place', 'username'] as const;
+      for (const field of requiredFields) {
+        if (!profileData[field]) {
+          throw new Error(`${field.replace('_', ' ')} is required`);
+        }
       }
 
-      // Insert or update based on existence
+      console.log('Updating profile with:', profileData);
+
       const { error: upsertError } = await supabase
         .from('profiles')
         .upsert(profileData, {
@@ -93,7 +116,16 @@ const WelcomeIntro: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
           ignoreDuplicates: false
         });
 
-      if (upsertError) throw upsertError;
+      if (upsertError) {
+        console.error('Upsert error:', upsertError);
+        if (upsertError.message?.includes('username')) {
+          throw new Error('This username is already taken. Please try a different name.');
+        }
+        if (upsertError.message?.includes('violates foreign key constraint')) {
+          throw new Error('User account not found. Please try logging in again.');
+        }
+        throw new Error(`Failed to save profile: ${upsertError.message}`);
+      }
 
       // Save to local storage for quick access
       localStorage.setItem('userProfile', JSON.stringify({
@@ -102,11 +134,13 @@ const WelcomeIntro: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
         lastName: formData.lastName
       }));
 
-      // Trigger completion callback
+      // Refresh profile in context and trigger completion
+      await refreshProfile();
       onComplete();
     } catch (err) {
       console.error('Profile update error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred while saving your profile');
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+      return; // Don't proceed with completion on error
     } finally {
       setIsLoading(false);
     }
@@ -127,36 +161,40 @@ const WelcomeIntro: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
     }
 
     // Initial fade in of background
-    gsap.fromTo(overlayRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 1.5, ease: "power2.inOut" }
-    );
+    if (overlayRef.current) {
+      gsap.fromTo(overlayRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.5, ease: "power2.inOut" }
+      );
+    }
 
     // Staggered text reveal
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    
-    tl.fromTo(titleRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.2 }
-    )
-    .fromTo(descRef.current,
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 },
-      "-=0.8"
-    )
-    .fromTo(buttonRef.current,
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8 },
-      "-=0.6"
-    );
+    if (titleRef.current && descRef.current && buttonRef.current) {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      
+      tl.fromTo(titleRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2 }
+      )
+      .fromTo(descRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1 },
+        "-=0.8"
+      )
+      .fromTo(buttonRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        "-=0.6"
+      );
 
-    // Button hover animation
-    buttonRef.current && gsap.to(buttonRef.current, {
-      scale: 1.05,
-      duration: 0.3,
-      paused: true,
-      ease: "power2.out"
-    });
+      // Button hover animation
+      gsap.to(buttonRef.current, {
+        scale: 1.05,
+        duration: 0.3,
+        paused: true,
+        ease: "power2.out"
+      });
+    }
   }, []);
 
   const handleButtonHover = (isEnter: boolean) => {
@@ -328,6 +366,4 @@ const WelcomeIntro: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
       </div>
     </div>
   );
-};
-
-export default WelcomeIntro;
+}

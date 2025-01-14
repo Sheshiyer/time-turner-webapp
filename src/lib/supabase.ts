@@ -25,26 +25,57 @@ export const signInWithEmail = async (email: string, password: string) => {
 }
 
 export const signUpWithEmail = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  })
+  try {
+    // First check if username (email prefix) meets length requirement
+    const username = email.split('@')[0]
+    if (username.length < 3) {
+      return { 
+        data: null, 
+        error: new Error('Username (email prefix) must be at least 3 characters long') 
+      }
+    }
 
-  if (data.user) {
-    // Create initial profile
+    // Attempt signup
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+
+    if (error) return { data, error }
+    if (!data.user) return { data, error: new Error('Signup failed - no user returned') }
+
+    // Create initial profile with required fields
     const { error: profileError } = await supabase
       .from('profiles')
       .insert([
         { 
           id: data.user.id,
-          username: email.split('@')[0], // Default username from email
+          username: username,
+          birth_date: '', // Required by schema but will be filled later
+          birth_time: '', // Required by schema but will be filled later
+          birth_place: '', // Required by schema but will be filled later
           updated_at: new Date().toISOString()
         }
       ])
-    if (profileError) return { data, error: profileError }
-  }
 
-  return { data, error }
+    if (profileError) {
+      // If profile creation fails, we should clean up the auth user
+      await supabase.auth.signOut()
+      console.error('Profile creation failed:', profileError)
+      return { 
+        data: null, 
+        error: new Error(`Failed to create profile: ${profileError.message}`) 
+      }
+    }
+
+    return { data, error: null }
+  } catch (err) {
+    console.error('Signup error:', err)
+    return { 
+      data: null, 
+      error: new Error('An unexpected error occurred during signup') 
+    }
+  }
 }
 
 export const signOut = async () => {

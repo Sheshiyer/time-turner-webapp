@@ -55,6 +55,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [validationErrors, setValidationErrors] = useState<{
+    username?: string;
+    birth_date?: string;
+    birth_time?: string;
+    birth_place?: string;
+  }>({})
+  const [updateSuccess, setUpdateSuccess] = useState(false)
 
   useEffect(() => {
     if (profile) {
@@ -67,12 +74,60 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     }
   }, [profile])
 
+  const validateForm = () => {
+    const errors: {[key: string]: string} = {}
+    
+    // Username validation
+    if (!formData.username) {
+      errors.username = 'Username is required'
+    } else if (formData.username.length < 3) {
+      errors.username = 'Username must be at least 3 characters'
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      errors.username = 'Username can only contain letters, numbers, and underscores'
+    }
+
+    // Birth date validation
+    if (!formData.birth_date) {
+      errors.birth_date = 'Birth date is required'
+    } else {
+      const birthDate = new Date(formData.birth_date)
+      const today = new Date()
+      if (birthDate > today) {
+        errors.birth_date = 'Birth date cannot be in the future'
+      }
+    }
+
+    // Birth time validation
+    if (!formData.birth_time) {
+      errors.birth_time = 'Birth time is required'
+    }
+
+    // Birth place validation
+    if (!formData.birth_place) {
+      errors.birth_place = 'Birth place is required'
+    } else if (formData.birth_place.length < 3) {
+      errors.birth_place = 'Please enter a valid location'
+    } else if (!/^[a-zA-Z\s,]+$/.test(formData.birth_place)) {
+      errors.birth_place = 'Please enter a valid city and country'
+    }
+
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
     }))
+    // Clear validation error when user starts typing
+    setValidationErrors(prev => ({
+      ...prev,
+      [name]: undefined
+    }))
+    setError(null)
+    setUpdateSuccess(false)
   }
 
   const loadingMessages = [
@@ -103,15 +158,33 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     e.preventDefault()
     if (!user) return
 
-    setLoading(true)
     setError(null)
+    setUpdateSuccess(false)
+    
+    if (!validateForm()) {
+      return
+    }
+
+    setLoading(true)
     setLoadingMessage(loadingMessages[0])
 
     try {
       const { error } = await updateProfile(user.id, formData)
-      if (error) throw error
+      if (error) {
+        if (error.message.includes('username')) {
+          setValidationErrors(prev => ({
+            ...prev,
+            username: 'This username is already taken'
+          }))
+        } else {
+          throw error
+        }
+      } else {
+        setUpdateSuccess(true)
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      console.error('Profile update error:', err)
+      setError(err instanceof Error ? err.message : 'Failed to update profile')
     } finally {
       setLoading(false)
     }
@@ -201,48 +274,69 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
                 <input
                   type="text"
                   name="username"
-                  className="glass-input"
+                  className={`glass-input ${validationErrors.username ? 'border-red-400' : ''}`}
                   value={formData.username}
                   onChange={handleInputChange}
+                  placeholder="Letters, numbers, underscores only"
                   required
                 />
+                {validationErrors.username && (
+                  <p className="mt-1 text-red-400 text-sm">{validationErrors.username}</p>
+                )}
               </div>
               <div className="form-group">
                 <label className="text-sm text-white/60">Birth Date</label>
                 <input
                   type="date"
                   name="birth_date"
-                  className="glass-input"
+                  className={`glass-input ${validationErrors.birth_date ? 'border-red-400' : ''}`}
                   value={formData.birth_date}
                   onChange={handleInputChange}
+                  max={new Date().toISOString().split('T')[0]}
                   required
                 />
+                {validationErrors.birth_date && (
+                  <p className="mt-1 text-red-400 text-sm">{validationErrors.birth_date}</p>
+                )}
               </div>
               <div className="form-group">
                 <label className="text-sm text-white/60">Birth Time</label>
                 <input
                   type="time"
                   name="birth_time"
-                  className="glass-input"
+                  className={`glass-input ${validationErrors.birth_time ? 'border-red-400' : ''}`}
                   value={formData.birth_time}
                   onChange={handleInputChange}
                   required
                 />
+                {validationErrors.birth_time && (
+                  <p className="mt-1 text-red-400 text-sm">{validationErrors.birth_time}</p>
+                )}
               </div>
               <div className="form-group">
                 <label className="text-sm text-white/60">Birth Place</label>
                 <input
                   type="text"
                   name="birth_place"
-                  className="glass-input"
+                  className={`glass-input ${validationErrors.birth_place ? 'border-red-400' : ''}`}
                   value={formData.birth_place}
                   onChange={handleInputChange}
-                  placeholder="City, Country"
+                  placeholder="City, Country (e.g., London, United Kingdom)"
                   required
                 />
+                {validationErrors.birth_place && (
+                  <p className="mt-1 text-red-400 text-sm">{validationErrors.birth_place}</p>
+                )}
               </div>
               {error && (
-                <div className="text-red-500 text-sm mt-2">{error}</div>
+                <div className="text-red-400 text-sm mt-2 p-2 bg-red-500/10 rounded-lg">
+                  {error}
+                </div>
+              )}
+              {updateSuccess && (
+                <div className="text-emerald-400 text-sm mt-2 p-2 bg-emerald-500/10 rounded-lg">
+                  Profile updated successfully!
+                </div>
               )}
               {loading ? (
                 <div className="mt-8">
