@@ -86,14 +86,16 @@ const MainContent: React.FC = () => {
 }
 
 const AuthenticatedContent: React.FC = () => {
-  const { user, profile, loading } = useAuth()
+  const { user, profile, loading, profileLoading, refreshProfile } = useAuth()
 
-  if (loading) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#F6F2C0]"></div>
-      </div>
-    )
+  const LoadingSpinner = () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#F6F2C0]"></div>
+    </div>
+  )
+
+  if (loading || profileLoading) {
+    return <LoadingSpinner />
   }
 
   if (!user) {
@@ -102,7 +104,7 @@ const AuthenticatedContent: React.FC = () => {
 
   // Show welcome screen if user has no profile data
   if (!profile?.birth_date || !profile?.birth_time || !profile?.birth_place) {
-    return <WelcomeIntro onComplete={() => window.location.reload()} />
+    return <WelcomeIntro onComplete={refreshProfile} />
   }
 
   return <MainContent />
@@ -110,9 +112,11 @@ const AuthenticatedContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <AuthenticatedContent />
-    </AuthProvider>
+    <div className="min-h-screen bg-[#1a0f0d] text-white">
+      <AuthProvider>
+        <AuthenticatedContent />
+      </AuthProvider>
+    </div>
   )
 }
 

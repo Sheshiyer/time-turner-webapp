@@ -116,7 +116,7 @@ export const AuthForm = () => {
   }
 
   return (
-    <div className="alethiometer-bg">
+    <div className="alethiometer-bg min-h-screen w-full fixed inset-0">
       {/* Radial overlay for depth */}
       <div className="absolute inset-0">
         {/* Dark vignette edges */}
@@ -131,7 +131,7 @@ export const AuthForm = () => {
         />
       </div>
 
-      <div className="responsive-container min-h-screen flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="responsive-container h-screen flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-lg">
           {/* Decorative circles */}
           <div className="absolute inset-0 pointer-events-none">

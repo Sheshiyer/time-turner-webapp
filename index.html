@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-[#1a0f0d] text-white">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Time Turner</title>
+    <style>
+      /* Prevent white flash before Tailwind loads */
+      html, body {
+        background-color: #1a0f0d;
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+      }
+    </style>
   </head>
-  <body>
+  <body class="bg-[#1a0f0d]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
