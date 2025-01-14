@@ -9,8 +9,8 @@ declare global {
 }
 
 const ProfileForm: React.FC = () => {
-  const { userData, updateUser } = useUser()
-  const [isEditing, setIsEditing] = useState(!userData)
+  const { profile, updateProfile } = useUser()
+  const [isEditing, setIsEditing] = useState(!profile)
   const [currentStep, setCurrentStep] = useState(0)
   const debounce = (fn: Function, delay: number) => {
     let timeoutId: NodeJS.Timeout
@@ -21,13 +21,13 @@ const ProfileForm: React.FC = () => {
   }
 
   const [formData, setFormData] = useState(() => {
-    // Initialize with userData if it exists
-    if (userData) {
+    // Initialize with profile if it exists
+    if (profile) {
       return {
-        name: userData.name,
-        birthDate: userData.birthDate,
-        birthTime: userData.birthTime,
-        location: userData.location
+        name: profile.username,
+        birthDate: profile.birth_date,
+        birthTime: profile.birth_time,
+        location: profile.birth_place
       }
     }
     // Otherwise use empty defaults
@@ -35,11 +35,7 @@ const ProfileForm: React.FC = () => {
       name: '',
       birthDate: '',
       birthTime: '',
-      location: {
-        address: '',
-        lat: 0,
-        lng: 0
-      }
+      location: ''
     }
   })
 
@@ -97,11 +93,7 @@ const ProfileForm: React.FC = () => {
             if (place.geometry && place.formatted_address) {
               setFormData(prev => ({
                 ...prev,
-                location: {
-                  address: place.formatted_address,
-                  lat: place.geometry.location.lat(),
-                  lng: place.geometry.location.lng()
-                }
+                location: place.formatted_address
               }));
               setPlaceError('');
             } else {
@@ -131,9 +123,14 @@ const ProfileForm: React.FC = () => {
     };
   }, [currentStep]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    updateUser(formData)
+    await updateProfile({
+      username: formData.name,
+      birth_date: formData.birthDate,
+      birth_time: formData.birthTime,
+      birth_place: formData.location
+    })
     setIsEditing(false)
   }
 
@@ -324,7 +321,7 @@ const ProfileForm: React.FC = () => {
             ref={autocompleteInput}
             type="text"
             placeholder="Search for a city..."
-            defaultValue={formData.location.address}
+            defaultValue={formData.location}
             className={`w-full bg-gray-800/50 rounded-lg px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-gray-700/30 backdrop-blur-sm transition-all hover:border-gray-600/30 hover:bg-gray-800/70 ${
               placeError ? 'border-red-500/50' : ''
             } ${!placesLoaded ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -345,19 +342,19 @@ const ProfileForm: React.FC = () => {
       </div>
       <motion.button
         onClick={handleSubmit}
-        disabled={!formData.location.address}
+        disabled={!formData.location}
         className={`px-10 py-4 text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/25 font-medium tracking-wide ${
-          !formData.location.address ? 'opacity-50 cursor-not-allowed' : ''
+          !formData.location ? 'opacity-50 cursor-not-allowed' : ''
         }`}
-        whileHover={formData.location.address ? { scale: 1.05 } : {}}
-        whileTap={formData.location.address ? { scale: 0.95 } : {}}
+        whileHover={formData.location ? { scale: 1.05 } : {}}
+        whileTap={formData.location ? { scale: 0.95 } : {}}
       >
         Complete Profile
       </motion.button>
     </motion.div>
   )
 
-  if (!isEditing && userData) {
+  if (!isEditing && profile) {
     return (
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-10 mb-4 shadow-xl backdrop-blur-sm border border-gray-700/30 w-[95%] max-w-6xl mx-auto animate-fadeIn relative overflow-hidden before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(0,0,0,0))] after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_50%_-20%,rgba(59,130,246,0.08),rgba(0,0,0,0))]">
         {/* Profile view remains the same */}

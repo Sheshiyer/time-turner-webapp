@@ -31,7 +31,7 @@ const calculateBiorhythm = (birthDate: Date, targetDate: Date) => {
 }
 
 export const TimeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { userData } = useUser()
+  const { profile } = useUser()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [organHour, setOrganHour] = useState(0)
   const [biorhythm, setBiorhythm] = useState({
@@ -51,8 +51,8 @@ export const TimeProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setOrganHour(tcmHour)
       
       // Calculate biorhythm only if we have user data
-      if (userData?.birthDate) {
-        const birthDate = new Date(userData.birthDate)
+      if (profile?.birth_date) {
+        const birthDate = new Date(profile.birth_date)
         setBiorhythm(calculateBiorhythm(birthDate, now))
       }
     }
@@ -61,7 +61,7 @@ export const TimeProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const interval = setInterval(updateTime, 1000)
 
     return () => clearInterval(interval)
-  }, [userData?.birthDate]) // Re-run effect when birth date changes
+  }, [profile?.birth_date]) // Re-run effect when birth date changes
 
   return (
     <TimeContext.Provider value={{ currentTime, organHour, biorhythm }}>
