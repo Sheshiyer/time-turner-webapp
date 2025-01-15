@@ -1,9 +1,10 @@
-# Time Turner Chrome Extension
+# Time Turner
 
-A Chrome extension that combines traditional time-keeping wisdom with modern biorhythm analysis.
+A web application that combines traditional time-keeping wisdom with modern biorhythm analysis, inspired by the alethiometer from His Dark Materials.
 
 ## Features
 
+- Interactive 2D alethiometer interface
 - Zodiac and TCM time analysis
 - Personal biorhythm tracking
 - Traditional time unit conversions
@@ -28,10 +29,16 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 ```bash
 npm run dev
 ```
+This will start the development server at http://localhost:5173
 
-4. Build:
+4. Production Build:
 ```bash
 npm run build
+```
+
+5. Preview Production Build:
+```bash
+npm run preview
 ```
 
 ## Authentication
@@ -74,6 +81,16 @@ supabase link --project-ref your_project_ref
 ```bash
 supabase db push
 ```
+
+## Deployment
+
+1. Build the project:
+```bash
+npm run build
+```
+
+2. Deploy to your preferred hosting platform (e.g., Vercel, Netlify, or GitHub Pages).
+The project includes configuration for various deployment platforms in the `vite.config.ts` file.
 
 ## Contributing
 

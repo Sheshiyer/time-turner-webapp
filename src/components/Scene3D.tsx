@@ -1,3 +1,5 @@
+// DISABLED 3D VIEW FOR NOW - TO BE RE-ENABLED IN FUTURE
+/*
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, Effects } from '@react-three/drei'
 import { EffectComposer, Bloom, DepthOfField } from '@react-three/postprocessing'
@@ -157,3 +159,4 @@ export default function Scene3D({ birthDate, birthTime, birthPlace }: Scene3DPro
     </div>
   )
 }
+*/

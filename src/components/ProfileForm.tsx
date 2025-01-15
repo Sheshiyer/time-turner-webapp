@@ -194,7 +194,7 @@ const ProfileForm: React.FC = () => {
                 if (formData.name) nextStep()
               }
             }}
-            className="w-full bg-gray-800/50 rounded-lg px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-gray-700/30 backdrop-blur-sm transition-all hover:border-gray-600/30 hover:bg-gray-800/70"
+            className="w-full bg-white/90 rounded-lg px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-[#F6F2C0]/50 border border-[#F6F2C0]/30 backdrop-blur-sm transition-all hover:border-[#F6F2C0]/50"
             placeholder="Enter your name"
             required
             autoFocus
@@ -240,7 +240,7 @@ const ProfileForm: React.FC = () => {
                 if (formData.birthDate) nextStep()
               }
             }}
-            className="w-full bg-gray-800/50 rounded-lg px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-gray-700/30 backdrop-blur-sm transition-all hover:border-gray-600/30 hover:bg-gray-800/70 [color-scheme:dark]"
+            className="w-full bg-white/90 rounded-lg px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-[#F6F2C0]/50 border border-[#F6F2C0]/30 backdrop-blur-sm transition-all hover:border-[#F6F2C0]/50"
             required
             autoFocus
           />
@@ -285,7 +285,7 @@ const ProfileForm: React.FC = () => {
                 if (formData.birthTime) nextStep()
               }
             }}
-            className="w-full bg-gray-800/50 rounded-lg px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-gray-700/30 backdrop-blur-sm transition-all hover:border-gray-600/30 hover:bg-gray-800/70 [color-scheme:dark]"
+            className="w-full bg-white/90 rounded-lg px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-[#F6F2C0]/50 border border-[#F6F2C0]/30 backdrop-blur-sm transition-all hover:border-[#F6F2C0]/50"
             required
             autoFocus
           />
@@ -322,7 +322,7 @@ const ProfileForm: React.FC = () => {
             type="text"
             placeholder="Search for a city..."
             defaultValue={formData.location}
-            className={`w-full bg-gray-800/50 rounded-lg px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-gray-700/30 backdrop-blur-sm transition-all hover:border-gray-600/30 hover:bg-gray-800/70 ${
+            className={`w-full bg-white/90 rounded-lg px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-[#F6F2C0]/50 border border-[#F6F2C0]/30 backdrop-blur-sm transition-all hover:border-[#F6F2C0]/50 ${
               placeError ? 'border-red-500/50' : ''
             } ${!placesLoaded ? 'opacity-50 cursor-not-allowed' : ''}`}
             required

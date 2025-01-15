@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ClockControls, { RingType } from './ClockControls';
 import gsap from 'gsap';
 import TcmRing from './TcmRing';
 import BiorhythmRing from './BiorhythmRing';
@@ -43,19 +44,22 @@ interface AlethiometerClockProps {
   birthDate: string;
   birthTime: string;
   birthPlace: string;
+  visibleRings: Record<RingType, boolean>;
+  showCentralInfo: boolean;
+  onCloseCentralInfo: () => void;
 }
 
-const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthTime, birthPlace }) => {
+const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ 
+  birthDate, 
+  birthTime, 
+  birthPlace,
+  visibleRings,
+  showCentralInfo,
+  onCloseCentralInfo
+}) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [visibleRings, setVisibleRings] = useState({
-    zodiac: true,
-    tcm: true,
-    daily: true,
-    biorhythm: true
-  });
   const [showLegend, setShowLegend] = useState(false);
   const [currentZodiac, setCurrentZodiac] = useState('');
-  const [showCentralInfo, setShowCentralInfo] = useState(false);
   
   const calculatePosition = (index: number, total: number, radius: number) => {
     const angle = (index * 360) / total - 90; // -90 to start at top
@@ -219,7 +223,7 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
       {/* Central Info Modal */}
       <CentralInfo
         visible={showCentralInfo}
-        onClose={() => setShowCentralInfo(false)}
+        onClose={onCloseCentralInfo}
         rings={DEFAULT_RINGS}
         birthDate={birthDate}
         birthTime={birthTime}
@@ -227,8 +231,8 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
       />
 
       {/* Clock container */}
-      <div className="flex items-center justify-center p-4">
-        <div className="w-full max-w-[380px] aspect-square relative">
+      <div className="flex items-center justify-center p-4 relative">
+        <div className="w-full max-w-[380px] aspect-square">
           <svg
             ref={svgRef}
             viewBox="0 0 400 400"
@@ -493,48 +497,6 @@ const AlethiometerClock: React.FC<AlethiometerClockProps> = ({ birthDate, birthT
           </svg>
         </div>
 
-      </div>
-
-      {/* Bottom menu */}
-      <div className="flex items-center justify-center pb-2">
-        <div className="flex items-center justify-center gap-3 py-2.5 px-5 glass-effect rounded-full shadow-lg">
-          <button 
-            onClick={() => setVisibleRings(prev => ({ ...prev, zodiac: !prev.zodiac }))}
-            className="glass-button cursor-pointer hover:opacity-80 transition-opacity"
-            title="Toggle Zodiac Ring - Shows your astrological influences"
-          >
-            {visibleRings.zodiac ? <SunIcon className="w-5 h-5" /> : <SunIcon className="w-5 h-5 opacity-40" />}
-          </button>
-          <button 
-            onClick={() => setVisibleRings(prev => ({ ...prev, tcm: !prev.tcm }))}
-            className="glass-button cursor-pointer hover:opacity-80 transition-opacity"
-            title="Toggle TCM Ring - Traditional Chinese Medicine Elements"
-          >
-            {visibleRings.tcm ? <MoonIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5 opacity-40" />}
-          </button>
-          <button 
-            onClick={() => setVisibleRings(prev => ({ ...prev, daily: !prev.daily }))}
-            className="glass-button cursor-pointer hover:opacity-80 transition-opacity"
-            title="Toggle Daily Ring - 24-hour Cycle"
-          >
-            {visibleRings.daily ? <ClockIcon className="w-5 h-5" /> : <ClockIcon className="w-5 h-5 opacity-40" />}
-          </button>
-          <button 
-            onClick={() => setVisibleRings(prev => ({ ...prev, biorhythm: !prev.biorhythm }))}
-            className="glass-button cursor-pointer hover:opacity-80 transition-opacity"
-            title="Toggle Biorhythm Ring - Your Physical, Emotional, and Intellectual Cycles"
-          >
-            {visibleRings.biorhythm ? <HeartIcon className="w-5 h-5" /> : <HeartIcon className="w-5 h-5 opacity-40" />}
-          </button>
-          <div className="w-px h-4 bg-white/10" /> {/* Divider */}
-          <button 
-            className="glass-button cursor-pointer hover:opacity-80 transition-opacity"
-            title="View Information and Settings"
-            onClick={() => setShowCentralInfo(true)}
-          >
-            <InformationCircleIcon className="w-5 h-5" />
-          </button>
-        </div>
       </div>
 
       {/* Legend popup */}

@@ -169,9 +169,9 @@ export const AuthForm = () => {
                     setEmail(e.target.value)
                     setValidationErrors(prev => ({...prev, email: undefined}))
                   }}
-                  className={`w-full px-4 py-3 bg-white/10 rounded-lg border 
+                  className={`w-full px-4 py-3 bg-white/90 rounded-lg border 
                            ${validationErrors.email ? 'border-red-400' : 'border-[#F6F2C0]/30'}
-                           text-white placeholder-white/50 focus:outline-none focus:border-[#F6F2C0]
+                           text-black placeholder-gray-500 focus:outline-none focus:border-[#F6F2C0]
                            backdrop-blur-sm transition-all`}
                   required
                   placeholder="Email address"
@@ -190,9 +190,9 @@ export const AuthForm = () => {
                     setPassword(e.target.value)
                     setValidationErrors(prev => ({...prev, password: undefined}))
                   }}
-                  className={`w-full px-4 py-3 bg-white/10 rounded-lg border 
+                  className={`w-full px-4 py-3 bg-white/90 rounded-lg border 
                            ${validationErrors.password ? 'border-red-400' : 'border-[#F6F2C0]/30'}
-                           text-white placeholder-white/50 focus:outline-none focus:border-[#F6F2C0]
+                           text-black placeholder-gray-500 focus:outline-none focus:border-[#F6F2C0]
                            backdrop-blur-sm transition-all`}
                   required
                   placeholder={mode === 'signup' ? 'Password (min 6 characters)' : 'Password'}

@@ -1,3 +1,5 @@
+// DISABLED VIEW TOGGLE FOR NOW - TO BE RE-ENABLED IN FUTURE
+/*
 import React from 'react';
 import { CubeIcon, ClockIcon } from '@heroicons/react/24/outline';
 
@@ -29,3 +31,4 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ is3D, onToggle }) => {
 };
 
 export default ViewToggle;
+*/

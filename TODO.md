@@ -2,21 +2,11 @@
 
 ## Core System Updates
 
-### View Toggle Implementation
-- [ ] Create ViewToggle component
-- [ ] Add view state management in App.tsx
-- [ ] Implement smooth transition animations between views
-- [ ] Preserve state and alignments during view switches
-
-### 3D View Refinements
-- [ ] Simplify sphere materials and textures
-- [ ] Implement basic crystalline effect
-- [ ] Add Dust particle system
-  - [ ] Basic particle flow
-  - [ ] Alignment-reactive behavior
-  - [ ] Performance optimization
-- [ ] Improve sphere transparency and layering
-- [ ] Add subtle glow effects for active alignments
+### Web Interface Implementation
+- [ ] Optimize app for web browser environment
+- [ ] Implement responsive design
+- [ ] Add progressive web app capabilities
+- [ ] Create smooth navigation system
 
 ### 2D View Enhancements
 - [ ] Refine ring aesthetics to match alethiometer style
@@ -24,20 +14,21 @@
 - [ ] Add hover effects for symbols
 - [ ] Enhance rotation mechanics
 - [ ] Implement precise alignment detection
+- [ ] Add touch support for mobile devices
 
 ## Shared Components
 
 ### State Management
-- [ ] Create shared state interface for both views
-- [ ] Implement state synchronization
+- [ ] Create unified state interface
+- [ ] Implement state persistence
 - [ ] Add alignment detection system
 - [ ] Create meaning interpretation system
 
 ### User Interface
-- [ ] Design view toggle button
-- [ ] Add view transition indicators
-- [ ] Implement shared controls panel
-- [ ] Create unified settings interface
+- [ ] Design responsive navigation
+- [ ] Add loading indicators
+- [ ] Implement settings panel
+- [ ] Create unified controls interface
 
 ## Features
 
@@ -46,12 +37,6 @@
 - [ ] Implement alignment detection logic
 - [ ] Add visual feedback for alignments
 - [ ] Create alignment history tracking
-
-### Dust Visualization
-- [ ] Implement particle system
-- [ ] Add flow patterns between spheres
-- [ ] Create alignment-reactive behavior
-- [ ] Optimize performance
 
 ### Time Integration
 - [ ] Improve real-time updates
@@ -62,10 +47,11 @@
 ## Optimization
 
 ### Performance
-- [ ] Optimize 3D rendering
-- [ ] Implement view-specific detail levels
-- [ ] Add particle system scaling
+- [ ] Optimize ring animations
+- [ ] Implement lazy loading
+- [ ] Add service worker
 - [ ] Optimize state management
+- [ ] Implement asset caching
 
 ### Accessibility
 - [ ] Add keyboard controls
@@ -76,27 +62,27 @@
 ## Testing
 
 ### Unit Tests
-- [ ] Test view toggle functionality
-- [ ] Verify state preservation
+- [ ] Test ring rotation functionality
+- [ ] Verify state persistence
 - [ ] Test alignment detection
 - [ ] Validate time calculations
 
 ### Integration Tests
-- [ ] Test view transitions
-- [ ] Verify state synchronization
-- [ ] Test particle system
+- [ ] Test responsive behavior
+- [ ] Verify state management
+- [ ] Test touch interactions
 - [ ] Validate user interactions
 
 ### Performance Tests
 - [ ] Measure rendering performance
-- [ ] Test particle system scaling
+- [ ] Test mobile performance
 - [ ] Verify state management efficiency
 - [ ] Monitor memory usage
 
 ## Documentation
 
 ### User Guide
-- [ ] Document view switching
+- [ ] Document interface usage
 - [ ] Explain alignment system
 - [ ] Detail interaction methods
 - [ ] Create troubleshooting guide

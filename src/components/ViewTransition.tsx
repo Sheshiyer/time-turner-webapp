@@ -1,3 +1,5 @@
+// DISABLED VIEW TRANSITION FOR NOW - TO BE RE-ENABLED IN FUTURE
+/*
 import React from 'react';
 
 interface ViewTransitionProps {
@@ -14,3 +16,4 @@ const ViewTransition: React.FC<ViewTransitionProps> = ({ show, children }) => {
 };
 
 export default ViewTransition;
+*/

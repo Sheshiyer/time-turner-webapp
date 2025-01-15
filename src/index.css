@@ -2,190 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --gold-light: #F6F2C0;
-  --gold-mid: #CB9B51;
-  --gold-dark: #AA771C;
-}
-
-/* Base Styles */
-html, body, #root {
-  @apply w-full h-full m-0 p-0;
-  min-height: 100vh;
-  /* Support for mobile browsers with dynamic toolbars */
-  min-height: -webkit-fill-available;
-}
-
-/* DatePicker Custom Styles */
-.react-datepicker {
-  background-color: #1a1a1a;
-  border: 1px solid rgba(246, 242, 192, 0.3);
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  font-family: system-ui, sans-serif;
-}
-
-.react-datepicker__header {
-  background-color: #2a2a2a;
-  border-bottom: 1px solid rgba(246, 242, 192, 0.3);
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-}
-
-.react-datepicker__current-month,
-.react-datepicker__day-name,
-.react-datepicker-time__header {
-  color: #F6F2C0;
-  font-weight: 500;
-}
-
-.react-datepicker__day {
-  color: white;
-  border-radius: 0.25rem;
-  transition: all 0.2s;
-}
-
-.react-datepicker__day:hover {
-  background-color: #CB9B51;
-  color: black;
-}
-
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
-  background-color: #F6F2C0 !important;
-  color: black !important;
-}
-
-.react-datepicker__time-container {
-  border-left: 1px solid rgba(246, 242, 192, 0.3);
-}
-
-.react-datepicker__time-box {
-  background-color: #1a1a1a;
-}
-
-.react-datepicker__time-list-item {
-  color: white;
-  transition: all 0.2s;
-}
-
-.react-datepicker__time-list-item:hover {
-  background-color: #CB9B51 !important;
-  color: black !important;
-}
-
-.react-datepicker__time-list-item--selected {
-  background-color: #F6F2C0 !important;
-  color: black !important;
-}
-
-.react-datepicker__input-container input {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(246, 242, 192, 0.3);
-  border-radius: 0.5rem;
-  color: white;
-  backdrop-filter: blur(4px);
-  transition: all 0.2s;
-}
-
-.react-datepicker__input-container input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.react-datepicker__input-container input:focus {
-  outline: none;
-  border-color: #F6F2C0;
-}
-
-.react-datepicker__triangle {
-  display: none;
-}
-
-.react-datepicker-popper {
-  z-index: 50;
-}
-
-/* Glass Effect */
-.glass-effect {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Alethiometer Background */
-.alethiometer-bg {
-  @apply min-h-screen w-full;
-  background: radial-gradient(circle at center, #2a1f1d 0%, #1a0f0d 100%);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #1a1a1a;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(203, 155, 81, 0.5);
-  border-radius: 9999px;
-  transition: background-color 0.2s;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(203, 155, 81, 0.7);
-}
-
-/* Time Picker Custom Styles */
-.react-datepicker__time-container .react-datepicker__time {
-  background-color: #1a1a1a;
-  border-bottom-right-radius: 0.5rem;
-}
-
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
-  border-bottom-right-radius: 0.5rem;
-}
-
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list::-webkit-scrollbar-track {
-  background-color: #1a1a1a;
-}
-
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list::-webkit-scrollbar-thumb {
-  background-color: rgba(203, 155, 81, 0.5);
-  border-radius: 9999px;
-}
-
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(203, 155, 81, 0.7);
-}
-
-/* Responsive Containers */
-.responsive-container {
-  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-}
-
-/* Form Container */
-.form-container {
-  @apply w-full max-w-md mx-auto;
-}
-
-/* Media Queries */
-@media (max-width: 640px) {
+@layer components {
   .glass-effect {
-    @apply rounded-none;
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+
+  .glass-input {
+    @apply w-full bg-white/90 rounded-lg px-4 py-3 text-black placeholder-gray-500 
+           focus:outline-none focus:ring-2 focus:ring-[#F6F2C0]/50 
+           border border-[#F6F2C0]/30 hover:border-[#F6F2C0]/50
+           backdrop-blur-sm transition-all;
+  }
+
+  .glass-button {
+    @apply px-6 py-3 text-white/90 rounded-lg
+           bg-gradient-to-br from-[#F6F2C0]/20 via-[#CB9B51]/20 to-[#F6E27A]/20
+           hover:from-[#F6F2C0]/30 hover:via-[#CB9B51]/30 hover:to-[#F6E27A]/30
+           border border-[#F6F2C0]/30 hover:border-[#F6F2C0]/50
+           transition-all duration-300 backdrop-blur-sm
+           disabled:opacity-50 disabled:cursor-not-allowed
+           focus:outline-none focus:ring-2 focus:ring-[#F6F2C0]/50;
   }
 }
 
-@media (min-height: 800px) {
-  .alethiometer-bg {
-    @apply flex items-center justify-center;
-  }
+/* Date/Time input color scheme */
+input[type="date"],
+input[type="time"] {
+  color-scheme: light;
 }
